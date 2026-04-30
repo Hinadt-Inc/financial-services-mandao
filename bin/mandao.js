@@ -158,6 +158,7 @@ async function callMcpTool (toolName, toolArgs, cfg, timeout = 30000) {
     }
   }
   try {
+    // 
     const sseRes = await fetch(sseUrl, {
       method: 'GET',
       headers: {
@@ -185,7 +186,7 @@ async function callMcpTool (toolName, toolArgs, cfg, timeout = 30000) {
       const { events, remaining } = parseSseBuffer(buffer);
       buffer = remaining;
       for (const { event, data } of events) {
-        // ① endpoint 事件 → 发 initialize 握手
+        // ① endpoint 事件 → 发 initialize 握手 告诉服务器：我用的是哪个协议版本（2024-11-05）、我是谁（clientInfo）。
         if (event === 'endpoint' && !epUrl) {
           epUrl = new URL(data.trim(), sseUrl).toString();
           postMessage(epUrl, {
