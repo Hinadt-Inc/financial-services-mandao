@@ -71,7 +71,7 @@ financial-services-mandao/
 {
   "mcpServers": {
     "mandao-company": {
-      "url": "http://10.0.22.184/mcp/sse",
+      "url": "http://10.254.75.48:8080/mcp/sse",
       "headers": {
         "Authorization": "Bearer YOUR_API_KEY"
       }
@@ -116,7 +116,7 @@ npm install -g mandao-agent-cli
 mandao init --authorization "Bearer YOUR_API_KEY"
 
 # 或指定自定义 MCP 地址
-mandao init --authorization "Bearer YOUR_API_KEY" --url http://10.0.22.184/mcp/sse
+mandao init --authorization "Bearer YOUR_API_KEY" --url http://10.254.75.48:8080/mcp/sse
 ```
 
 配置保存到 `~/.mandao/config.json`，后续无需重复配置。
@@ -192,11 +192,11 @@ mandao --help        # 帮助信息
 
 **MCP Server 信息**
 
-| 项目        | 值                           |
-| ----------- | ---------------------------- |
-| Server 名称 | `mandao-company`             |
-| SSE URL     | `http://10.0.22.184/mcp/sse` |
-| 协议        | MCP SSE（JSON-RPC 2.0）      |
+| 项目        | 值                                 |
+| ----------- | ---------------------------------- |
+| Server 名称 | `mandao-company`                   |
+| SSE URL     | `http://10.254.75.48:8080/mcp/sse` |
+| 协议        | MCP SSE（JSON-RPC 2.0）            |
 
 **工具列表**
 

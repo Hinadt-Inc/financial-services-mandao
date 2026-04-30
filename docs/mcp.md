@@ -12,7 +12,7 @@
 
 ### 基础信息
 
-- **MCP 服务 URL**：`http://10.0.22.184/mcp/sse`
+- **MCP 服务 URL**：`http://10.254.75.48:8080/mcp/sse`
 - **认证码**：`test`
 
 ### 配置示例
@@ -21,7 +21,7 @@
 {
   "mcpServers": {
     "mandao-company": {
-      "url": "http://10.0.22.184/mcp/sse",
+      "url": "http://10.254.75.48:8080/mcp/sse",
       "headers": {
         "Authorization": "Bearer 认证码：test"
       }
@@ -40,11 +40,11 @@
 
 **参数**
 
-| 参数名 | 类型 | 说明 |
-| --- | --- | --- |
-| `idNo` | `string` | 身份证号 |
-| `idName` | `string` | 姓名 |
-| `phoneNo` | `string` | 手机号 |
+| 参数名    | 类型     | 说明     |
+| --------- | -------- | -------- |
+| `idNo`    | `string` | 身份证号 |
+| `idName`  | `string` | 姓名     |
+| `phoneNo` | `string` | 手机号   |
 
 ### 2) `getXunxinQjdaV130`
 
@@ -52,11 +52,11 @@
 
 **参数**
 
-| 参数名 | 类型 | 说明 |
-| --- | --- | --- |
-| `idNo` | `string` | 身份证号 |
-| `idName` | `string` | 姓名 |
-| `phoneNo` | `string` | 手机号 |
+| 参数名    | 类型     | 说明     |
+| --------- | -------- | -------- |
+| `idNo`    | `string` | 身份证号 |
+| `idName`  | `string` | 姓名     |
+| `phoneNo` | `string` | 手机号   |
 
 ### 3) `getXunxinFmlhV140`
 
@@ -64,11 +64,11 @@
 
 **参数**
 
-| 参数名 | 类型 | 说明 |
-| --- | --- | --- |
-| `idNo` | `string` | 身份证号 |
-| `idName` | `string` | 姓名 |
-| `phoneNo` | `string` | 手机号 |
+| 参数名    | 类型     | 说明     |
+| --------- | -------- | -------- |
+| `idNo`    | `string` | 身份证号 |
+| `idName`  | `string` | 姓名     |
+| `phoneNo` | `string` | 手机号   |
 
 ### 4) `getXunxinQjtzV140`
 
@@ -76,8 +76,8 @@
 
 **参数**
 
-| 参数名 | 类型 | 说明 |
-| --- | --- | --- |
-| `idNo` | `string` | 身份证号 |
-| `idName` | `string` | 姓名 |
-| `phoneNo` | `string` | 手机号 |
+| 参数名    | 类型     | 说明     |
+| --------- | -------- | -------- |
+| `idNo`    | `string` | 身份证号 |
+| `idName`  | `string` | 姓名     |
+| `phoneNo` | `string` | 手机号   |

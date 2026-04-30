@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "mandao-company": {
-      "url": "http://10.0.22.184/mcp/sse",
+      "url": "http://10.254.75.48:8080/mcp/sse",
       "headers": {
         "Authorization": "Bearer YOUR_API_KEY"
       }

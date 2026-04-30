@@ -7,7 +7,7 @@
  *
  * 初始化：
  *   mandao init --authorization "Bearer YOUR_API_KEY"
- *   mandao init --authorization "Bearer YOUR_API_KEY" --url http://10.0.22.184/mcp/sse
+ *   mandao init --authorization "Bearer YOUR_API_KEY" --url http://10.254.75.48:8080/mcp/sse
  *
  * 查询：
  *   mandao query qjda      --idNo <身份证> --idName <姓名> [--phoneNo <手机号>] [--json] [--verbose]
@@ -34,7 +34,7 @@ const os = require('os');
 
 const CONFIG_DIR = path.join(os.homedir(), '.mandao');
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
-const DEFAULT_URL = 'http://10.0.22.184/mcp/sse';
+const DEFAULT_URL = 'http://10.254.75.48:8080/mcp/sse';
 
 function loadConfig () {
   try {

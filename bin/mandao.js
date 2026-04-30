@@ -7,7 +7,7 @@
  *
  * 初始化：
  *   mandao init --authorization "Bearer YOUR_API_KEY"
- *   mandao init --authorization "Bearer YOUR_API_KEY" --url http://10.0.22.184/mcp/sse
+ *   mandao init --authorization "Bearer YOUR_API_KEY" --url http://10.254.75.48:8080/mcp/sse
  *
  * 查询：
  *   mandao query qjda      --idNo <身份证> --idName <姓名> [--phoneNo <手机号>] [--json] [--verbose]
@@ -34,7 +34,7 @@ const os = require('os');
 
 const CONFIG_DIR = path.join(os.homedir(), '.mandao');
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
-const DEFAULT_URL = 'http://10.0.22.184/mcp/sse';
+const DEFAULT_URL = 'http://10.254.75.48:8080/mcp/sse';
 
 function loadConfig () {
   try {
@@ -117,28 +117,46 @@ function parseSseBuffer (buffer) {
 /**
  * 通过 MCP SSE 协议调用工具。
  *
- * 协议流程：
- *   1. GET /mcp/sse        建立 SSE 流，等待 `endpoint` 事件取得 POST 地址
- *   2. POST {endpoint}     发送 JSON-RPC 2.0 工具调用（与 SSE 读取并行）
- *   3. 从 SSE 流读取 `message` 事件，匹配 requestId 后返回结果
- * 
- * @param {*} toolName 工具名称
- * @param {*} toolArgs 工具参数
- * @param {*} cfg 配置
- * @param {*} timeout 超时时间
+ * 协议流程（符合 MCP 2024-11-05 规范）：
+ *   1. GET /mcp/sse          建立 SSE 流，等待 `endpoint` 事件取得 POST 地址
+ *   2. POST initialize       MCP 握手初始化，等待响应
+ *   3. POST notifications/initialized  通知服务端握手完成
+ *   4. POST tools/call       发送工具调用，从 SSE 流读取响应
+ *
+ * @param {string} toolName
+ * @param {object} toolArgs
+ * @param {object} cfg        { authorization, url }
+ * @param {number} [timeout]
  * @returns {Promise<any>}
  */
 async function callMcpTool (toolName, toolArgs, cfg, timeout = 30000) {
   const sseUrl = cfg.url || DEFAULT_URL;
   const authHeader = cfg.authorization;
-  const requestId = `req-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-
+  // 使用递增整数 id 方便匹配
+  const INIT_ID = 1;
+  const TOOL_ID = 2;
   const controller = new AbortController();
   const timer = setTimeout(
     () => controller.abort(new Error(`MCP 调用超时 (${timeout}ms): ${toolName}`)),
     timeout,
   );
-
+  // 向 endpoint POST 一条 JSON-RPC 消息，fire-and-forget（响应通过 SSE 回来）
+  async function postMessage (epUrl, payload) {
+    const body = JSON.stringify(payload);
+    const res = await fetch(epUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: authHeader,
+      },
+      body,
+      signal: controller.signal,
+    });
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      throw new Error(`POST 失败 HTTP ${res.status}: ${text}`);
+    }
+  }
   try {
     const sseRes = await fetch(sseUrl, {
       method: 'GET',
@@ -156,50 +174,57 @@ async function callMcpTool (toolName, toolArgs, cfg, timeout = 30000) {
     const reader = sseRes.body.getReader();
     const decoder = new TextDecoder();
     let buffer = '';
-    let endpointSent = false;
+    let epUrl = null;        // POST 地址，从 endpoint 事件获取
+    let initDone = false;    // initialize 握手是否完成
 
     while (true) {
       const { done, value } = await reader.read();
       if (done) throw new Error('SSE 连接意外关闭');
 
       buffer += decoder.decode(value, { stream: true });
-
       const { events, remaining } = parseSseBuffer(buffer);
       buffer = remaining;
-
       for (const { event, data } of events) {
-        // 收到 endpoint 事件 → 发送工具调用（只发一次，不阻塞 SSE 读取）
-        if (event === 'endpoint' && !endpointSent) {
-          endpointSent = true;
-          const epUrl = new URL(data.trim(), sseUrl);
-          const body = JSON.stringify({
+        // ① endpoint 事件 → 发 initialize 握手
+        if (event === 'endpoint' && !epUrl) {
+          epUrl = new URL(data.trim(), sseUrl).toString();
+          postMessage(epUrl, {
             jsonrpc: '2.0',
-            id: requestId,
-            method: 'tools/call',
-            params: { name: toolName, arguments: toolArgs },
-          });
-
-          fetch(epUrl.toString(), {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: authHeader,
+            id: INIT_ID,
+            method: 'initialize',
+            params: {
+              protocolVersion: '2024-11-05',
+              capabilities: {},
+              clientInfo: { name: 'mandao-cli', version: '1.0.0' },
             },
-            body,
-          }).then(async (r) => {
-            if (!r.ok) {
-              const text = await r.text().catch(() => '');
-              controller.abort(new Error(`工具调用请求失败，HTTP ${r.status}: ${text}`));
-            }
-          }).catch(() => { });
+          }).catch((e) => controller.abort(e));
         }
 
-        // 收到 message 事件 → 检查是否匹配本次请求
+        // ② message 事件
         if (event === 'message') {
           let msg;
           try { msg = JSON.parse(data); } catch { continue; }
 
-          if (msg.id === requestId) {
+          // initialize 响应 → 发 initialized 通知 + tools/call
+          if (msg.id === INIT_ID && !initDone) {
+            if (msg.error) throw new Error(`initialize 失败: ${msg.error.message}`);
+            initDone = true;
+
+            // notifications/initialized 无需等待响应
+            postMessage(epUrl, { jsonrpc: '2.0', method: 'notifications/initialized', params: {} })
+              .catch(() => { });
+
+            // 发送真正的工具调用
+            postMessage(epUrl, {
+              jsonrpc: '2.0',
+              id: TOOL_ID,
+              method: 'tools/call',
+              params: { name: toolName, arguments: toolArgs },
+            }).catch((e) => controller.abort(e));
+          }
+
+          // tools/call 响应
+          if (msg.id === TOOL_ID) {
             reader.cancel();
             clearTimeout(timer);
             if (msg.error) {
@@ -215,7 +240,6 @@ async function callMcpTool (toolName, toolArgs, cfg, timeout = 30000) {
     if (err.name === 'AbortError') {
       throw err.cause ?? new Error(`MCP 调用超时 (${timeout}ms): ${toolName}`);
     }
-    // Node.js fetch 将底层网络错误包在 err.cause 里，展开后信息更明确
     if (err.cause) {
       const cause = err.cause;
       throw new Error(`${err.message}（原因: ${cause.code ?? cause.message ?? cause}）`);
@@ -251,7 +275,7 @@ function printHeader (title, options) {
 }
 
 function printBizMeta (d) {
-  console.log(`  响应码: ${d.code} (${d.desc})   收费: ${d.fee}   版本: ${d.versions}`);
+  console.log(`  响应码: ${d.code} (${d.desc})   收费: ${d.fee}`);
 }
 
 /* ── 全景指数 QJDA ── */
