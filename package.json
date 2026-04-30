@@ -1,0 +1,21 @@
+{
+  "name": "mandao-agent-cli",
+  "version": "1.0.0",
+  "description": "满道金融风控 MCP 命令行工具，支持讯信全景指数/综合指数V2/信用探查指数/履约指数查询",
+  "main": "bin/mandao.js",
+  "bin": {
+    "mandao": "./bin/mandao.js"
+  },
+  "keywords": [
+    "mandao",
+    "xunxin",
+    "mcp",
+    "fintech",
+    "credit-risk"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
