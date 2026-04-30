@@ -6,6 +6,13 @@
   "bin": {
     "mandao": "./bin/mandao.js"
   },
+  "scripts": {
+    "test": "node bin/mandao.js init --authorization test",
+    "qjda": "node bin/mandao.js query qjda --idNo 张三 --idName 张三 --phoneNo 13764590131",
+    "zxradarv2": "node bin/mandao.js query zxradarv2 --idNo 张三 --idName 张三 --phoneNo 13764590131",
+    "qjtz": "node bin/mandao.js query qjtz --idNo 张三 --idName 张三 --phoneNo 13764590131",
+    "fmlh": "node bin/mandao.js query fmlh --idNo 张三 --idName 张三 --phoneNo 13764590131"
+  },
   "keywords": [
     "mandao",
     "xunxin",

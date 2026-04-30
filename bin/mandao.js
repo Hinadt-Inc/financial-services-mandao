@@ -48,7 +48,7 @@ function saveConfig (cfg) {
   fs.mkdirSync(CONFIG_DIR, { recursive: true });
   fs.writeFileSync(CONFIG_FILE, JSON.stringify(cfg, null, 2), 'utf8');
 }
-
+// 检查配置是否存在
 function requireConfig () {
   const cfg = loadConfig();
   if (!cfg || !cfg.authorization) {
@@ -121,6 +121,12 @@ function parseSseBuffer (buffer) {
  *   1. GET /mcp/sse        建立 SSE 流，等待 `endpoint` 事件取得 POST 地址
  *   2. POST {endpoint}     发送 JSON-RPC 2.0 工具调用（与 SSE 读取并行）
  *   3. 从 SSE 流读取 `message` 事件，匹配 requestId 后返回结果
+ * 
+ * @param {*} toolName 工具名称
+ * @param {*} toolArgs 工具参数
+ * @param {*} cfg 配置
+ * @param {*} timeout 超时时间
+ * @returns {Promise<any>}
  */
 async function callMcpTool (toolName, toolArgs, cfg, timeout = 30000) {
   const sseUrl = cfg.url || DEFAULT_URL;
@@ -209,6 +215,11 @@ async function callMcpTool (toolName, toolArgs, cfg, timeout = 30000) {
     if (err.name === 'AbortError') {
       throw err.cause ?? new Error(`MCP 调用超时 (${timeout}ms): ${toolName}`);
     }
+    // Node.js fetch 将底层网络错误包在 err.cause 里，展开后信息更明确
+    if (err.cause) {
+      const cause = err.cause;
+      throw new Error(`${err.message}（原因: ${cause.code ?? cause.message ?? cause}）`);
+    }
     throw err;
   }
 }
@@ -230,11 +241,12 @@ function extractBizData (mcpResult) {
 // 格式化输出：各产品
 // ─────────────────────────────────────────────
 
-function printHeader (title, idNo, idName) {
+function printHeader (title, options) {
   console.log(`\n${'═'.repeat(56)}`);
   console.log(`  ${title}`);
   console.log(`${'═'.repeat(56)}`);
-  console.log(`  身份证: ${idNo}  姓名: ${idName}`);
+  const phoneStr = options.phoneNo ? `  手机号: ${options.phoneNo}` : '';
+  console.log(`  身份证: ${options.idNo}  姓名: ${options.idName}${phoneStr}`);
   console.log(`${'─'.repeat(56)}`);
 }
 
@@ -391,15 +403,20 @@ function cmdInit (args) {
   if (!args.authorization) {
     console.error('错误：--authorization 为必填参数');
     console.error('示例：mandao init --authorization "Bearer YOUR_API_KEY"');
+    console.error('      mandao init --authorization "YOUR_API_KEY"  （会自动补充 Bearer 前缀）');
     process.exit(1);
   }
+  // 自动补充 Bearer 前缀
+  const authValue = args.authorization.startsWith('Bearer ')
+    ? args.authorization
+    : `Bearer ${args.authorization}`;
   const cfg = {
-    authorization: args.authorization,
+    authorization: authValue,
     url: args.url || DEFAULT_URL,
   };
   saveConfig(cfg);
   console.log('✓ 初始化完成，配置已保存到:', CONFIG_FILE);
-  console.log(`  authorization: ${cfg.authorization.slice(0, 20)}...`);
+  console.log(`  authorization: ${cfg.authorization}`);
   console.log(`  url:           ${cfg.url}`);
 }
 
@@ -429,7 +446,7 @@ async function cmdQuery (product, args) {
   const params = { idNo: args.idNo, idName: args.idName };
   if (args.phoneNo) params.phoneNo = args.phoneNo;
 
-  printHeader(def.title, args.idNo, args.idName);
+  printHeader(def.title, args);
   console.log('  正在查询...');
 
   let mcpResult;
@@ -437,6 +454,9 @@ async function cmdQuery (product, args) {
     mcpResult = await callMcpTool(def.tool, params, cfg);
   } catch (err) {
     console.error('\n查询失败：', err.message);
+    if (err.cause) console.error('底层原因：', err.cause?.code ?? err.cause?.message ?? err.cause);
+    console.error(`\n  请确认 MCP 服务地址可达：${cfg.url || DEFAULT_URL}`);
+    console.error('  可用 mandao config show 查看当前配置');
     process.exit(1);
   }
 
