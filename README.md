@@ -1,6 +1,6 @@
-# Financial Services Mandao — 漫道讯信 MCP 消费信贷技能集
+# Financial Services Mandao — 漫道迅信 MCP 消费信贷技能集
 
-> 基于讯信（Xunxin）MCP 实时数据，为消费信贷、互金风控提供 **贷前个人主体** 风险核查的 AI 工作流技能与命令行工具。
+> 基于迅信（Xunxin）MCP 实时数据，为消费信贷、互金风控提供 **贷前个人主体** 风险核查的 AI 工作流技能与命令行工具。
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/Node.js-%3E%3D20-brightgreen.svg)](https://nodejs.org)
@@ -38,13 +38,13 @@
 
 ---
 
-## 讯信 MCP 集成
+## 迅信 MCP 集成
 
-所有技能通过 **1 个** MCP Server 获取讯信封装数据；客户端侧通常注册为 **`mandao-company`**（与根目录 `.mcp.json` 一致）。
+所有技能通过 **1 个** MCP Server 获取迅信封装数据；客户端侧通常注册为 **`mandao-company`**（与根目录 `.mcp.json` 一致）。
 
 | Server           | 说明                                                                                            |
 | ---------------- | ----------------------------------------------------------------------------------------------- |
-| `mandao-company` | HTTP **SSE** + JSON-RPC `tools/call`；鉴权见 `Authorization`；对讯信 API 的加密封装由服务端完成 |
+| `mandao-company` | HTTP **SSE** + JSON-RPC `tools/call`；鉴权见 `Authorization`；对迅信 API 的加密封装由服务端完成 |
 
 **技能与 MCP 工具对应**
 
@@ -61,7 +61,7 @@
 
 ### 第一步：申请 MCP Key 与接入地址
 
-向讯信 / 本机构获取 **金融服务场景** 授权与 **API Key**（或网关 Token），并确认 **SSE URL**（示例见 [MCP 配置指南](./docs/MCP_CONFIGURATION.md)）。
+向迅信 / 本机构获取 **金融服务场景** 授权与 **API Key**（或网关 Token），并确认 **SSE URL**（示例见 [MCP 配置指南](./docs/MCP_CONFIGURATION.md)）。
 
 ### 第二步：一键安装
 
@@ -238,7 +238,7 @@ financial-services-mandao/
 | ------------------ | -------------------------- |
 | MCP                | Model Context Protocol     |
 | SSE                | Server-Sent Events         |
-| QJDA / QJTZ / FMLH | 讯信产品编码               |
+| QJDA / QJTZ / FMLH | 迅信产品编码               |
 | ZX-RadarV2_1       | 综合指数 V2 产品标识       |
 | KS / AUC           | 区分度指标（综合指数场景） |
 

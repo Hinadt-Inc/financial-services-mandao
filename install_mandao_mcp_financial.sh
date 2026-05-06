@@ -1,6 +1,6 @@
 #!/bin/bash
 # Financial Services Mandao MCP Plugin Installation Script
-# 金融机构漫道讯信MCP插件安装脚本
+# 金融机构漫道迅信MCP插件安装脚本
 #
 #
 # 一键安装命令:
@@ -19,7 +19,7 @@ NC='\033[0m'
 
 echo "=========================================="
 echo "  Financial Services Mandao MCP Installer"
-echo "  金融机构漫道讯信MCP安装程序"
+echo "  金融机构漫道迅信MCP安装程序"
 echo "=========================================="
 echo ""
 
@@ -140,7 +140,7 @@ cat > "$MCP_CONFIG_DEST" << MCPJSONEOF
       "headers": {
         "Authorization": "Bearer \${MANDAO_MCP_API_KEY}"
       },
-      "description": "漫道讯信MCP - 全景指数/综合指数V2/信用探查指数/履约指数"
+      "description": "漫道迅信MCP - 全景指数/综合指数V2/信用探查指数/履约指数"
     }
   }
 }
