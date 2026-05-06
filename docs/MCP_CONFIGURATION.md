@@ -14,21 +14,9 @@
 
 ### 方法 1：自动安装（推荐）
 
-在仓库根目录执行安装脚本，会备份已有 `~/.claude/.mcp.json` 并写入 `mandao-company`，同时安装 `skills/` 与 CLI 资源到 `~/.claude/`：
+重新运行安装脚本，它会自动创建 `.mcp.json`：
 
 ```bash
-git clone https://github.com/rdd0820/financial-services-mandao.git
-cd financial-services-mandao
-
-export MANDAO_MCP_API_KEY="your_api_key_here"
-
-bash install_mandao_mcp_financial.sh
-```
-
-也可仅拉取安装脚本（将 raw URL 换成你 fork 后的地址；需已设置 `MANDAO_MCP_API_KEY`，且 `curl` 一键模式需能解析到完整仓库——**更推荐克隆后本地执行**）：
-
-```bash
-export MANDAO_MCP_API_KEY="your_api_key_here"
 bash <(curl -sL https://raw.githubusercontent.com/rdd0820/financial-services-mandao/main/install_mandao_mcp_financial.sh)
 ```
 
@@ -103,7 +91,7 @@ claude
 | 目标                                     | 内容                                 |
 | -------------------------------------- | ---------------------------------- |
 | `~/.claude/.mcp.json`                  | `mandao-company`（覆盖写入前会备份）         |
-| `~/.claude/skills/xunxin-*`            | `SKILL.md` + `reference.md`        |
+| `~/.claude/skills/xunxin-`*            | `SKILL.md` + `reference.md`        |
 | `~/.claude/financial-services-mandao/` | `bin/`、`scripts/`、`package.json` 等 |
 
 

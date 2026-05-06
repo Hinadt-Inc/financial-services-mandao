@@ -45,17 +45,10 @@ TEMP_DIR=""
 
 if [[ "$SCRIPT_SOURCE" == /dev/fd/* ]] || [[ "$SCRIPT_SOURCE" == /proc/*/fd/* ]] || [ ! -f "$SCRIPT_SOURCE" ]; then
   INSTALL_MODE="curl"
-  echo -e "${BLUE}Installation mode: curl (downloading tarball)${NC}"
+  echo -e "${BLUE}Installation mode: curl (downloading from GitHub)${NC}"
 
-  if [ -z "${MANDAO_INSTALL_TAR_URL:-}" ]; then
-    echo -e "${RED}Error: MANDAO_INSTALL_TAR_URL is not set.${NC}"
-    echo "Example:"
-    echo '  export MANDAO_INSTALL_TAR_URL="https://github.com/rdd0820/financial-services-mandao/archive/refs/heads/main.tar.gz"'
-    echo "  bash -s < <(curl -sL https://raw.githubusercontent.com/rdd0820/financial-services-mandao/main/install_mandao_mcp_financial.sh)"
-    echo ""
-    echo "Or clone the repo and run this script locally (recommended)."
-    exit 1
-  fi
+  # 与 install_qcc_mcp_financial.sh 一致：curl 管道执行时默认拉 main 分支 tarball；可用 MANDAO_INSTALL_TAR_URL 覆盖（如私有 fork、固定 tag）
+  MANDAO_INSTALL_TAR_URL="${MANDAO_INSTALL_TAR_URL:-https://github.com/rdd0820/financial-services-mandao/archive/refs/heads/main.tar.gz}"
 
   TEMP_DIR=$(mktemp -d)
   echo -e "${BLUE}Downloading from: $MANDAO_INSTALL_TAR_URL${NC}"
@@ -92,8 +85,8 @@ if [ -z "${MANDAO_MCP_API_KEY:-}" ]; then
 
   case $choice in
     1)
-      echo -e "${YELLOW}Continuing. Placeholder will be written; set MANDAO_MCP_API_KEY before restarting Claude.${NC}"
-      export MANDAO_MCP_API_KEY="${MANDAO_MCP_API_KEY:-YOUR_API_KEY}"
+      echo -e "${YELLOW}Continuing without Mandao MCP key (demo / manual config later).${NC}"
+      echo -e "${YELLOW}  ~/.claude/.mcp.json will still contain Bearer \${MANDAO_MCP_API_KEY} — set the variable before starting Claude.${NC}"
       ;;
     2)
       read -p "Enter your Mandao MCP API Key / token: " api_key
@@ -147,7 +140,7 @@ cat > "$MCP_CONFIG_DEST" << MCPJSONEOF
       "headers": {
         "Authorization": "Bearer \${MANDAO_MCP_API_KEY}"
       },
-      "description": "满道讯信MCP - 全景指数/综合指数V2/信用探查指数/履约指数"
+      "description": "漫道讯信MCP - 全景指数/综合指数V2/信用探查指数/履约指数"
     }
   }
 }
@@ -220,6 +213,12 @@ for f in package.json package-lock.json pnpm-lock.yaml; do
   fi
 done
 
+if [ -f "$SOURCE_DIR/docs/MCP_CONFIGURATION.md" ]; then
+  mkdir -p "$BUNDLE_DEST/docs"
+  cp "$SOURCE_DIR/docs/MCP_CONFIGURATION.md" "$BUNDLE_DEST/docs/"
+  echo -e "${GREEN}  ✓ docs/MCP_CONFIGURATION.md copied${NC}"
+fi
+
 echo ""
 echo "=========================================="
 echo "  Step 4: Verifying Installation"
@@ -276,41 +275,60 @@ echo "  Skills: ${MANDAO_SKILLS[*]}"
 echo "  Bundle: $BUNDLE_DEST"
 echo ""
 
-if [ -n "${MANDAO_MCP_API_KEY:-}" ] && [ "$MANDAO_MCP_API_KEY" != "YOUR_API_KEY" ]; then
-  echo -e "${GREEN}Mandao API key: set in this shell (ensure Claude Code inherits MANDAO_MCP_API_KEY).${NC}"
+if [ -n "${MANDAO_MCP_API_KEY:-}" ]; then
+  echo -e "${GREEN}Mandao MCP Status: CONFIGURED (MANDAO_MCP_API_KEY set in this shell)${NC}"
+  echo "Ensure the same environment launches Claude Code so the key is visible to the MCP client."
 else
-  echo -e "${YELLOW}Mandao API key: NOT fully configured — set MANDAO_MCP_API_KEY before using MCP.${NC}"
+  echo -e "${YELLOW}Mandao MCP Status: NOT CONFIGURED${NC}"
+  echo "To enable Mandao / Xunxin MCP:"
+  echo "  export MANDAO_MCP_API_KEY='your_key_here'"
 fi
 
 echo ""
 echo "=========================================="
-echo "  ⚠️  IMPORTANT: Post-Installation"
+echo "  ⚠️  IMPORTANT: Post-Installation Steps"
 echo "=========================================="
 echo ""
-echo -e "${YELLOW}Restart Claude Code (or your MCP client) so .mcp.json is reloaded.${NC}"
+echo -e "${YELLOW}You MUST restart Claude Code to load the MCP configuration!${NC}"
 echo ""
-echo "1. Export key in the same environment that launches Claude:"
-echo "     export MANDAO_MCP_API_KEY='your_token'"
-echo ""
-echo "2. In Claude Code you should see MCP server: mandao-company"
-echo ""
-echo "3. CLI (local copy):"
-echo "     node $BUNDLE_DEST/bin/mandao.js init --authorization \"Bearer \$MANDAO_MCP_API_KEY\""
-echo "     node $BUNDLE_DEST/bin/mandao.js query qjda --idNo ... --idName ..."
-echo ""
-echo "4. Optional: npm link / global install from bundle:"
-echo "     cd $BUNDLE_DEST && npm install -g ."
+echo "Step 1: Completely exit Claude Code"
+echo "Step 2: Ensure MANDAO_MCP_API_KEY is set:"
+echo "       export MANDAO_MCP_API_KEY='your_api_key_here'"
+echo "Step 3: Restart Claude Code"
+echo "Step 4: Verify MCP server is loaded:"
+echo "       You should see 'mandao-company' in available tools"
 echo ""
 echo "=========================================="
-echo "  Skill command hints (see each SKILL.md)"
+echo "  Quick Start"
 echo "=========================================="
 echo ""
-echo "  /xunxin-qjda       — 全景指数 QJDA"
-echo "  /xunxin-zxradarv2  — 综合指数V2"
-echo "  /xunxin-qjtz      — 信用探查指数"
-echo "  /xunxin-fmlh      — 履约指数"
+echo "After restarting Claude Code:"
 echo ""
-echo -e "${GREEN}🎉 Done.${NC}"
+echo "1. Verify MCP: Claude should list tools from mandao-company (e.g. getXunxinFmlhV140)."
+echo ""
+echo "2. Slash skills (see each SKILL.md):"
+echo ""
+echo "   /xunxin-qjda --idNo ... --idName ..."
+echo "   /xunxin-zxradarv2 --idNo ... --idName ..."
+echo "   /xunxin-qjtz --idNo ... --idName ..."
+echo "   /xunxin-fmlh --idNo ... --idName ..."
+echo ""
+echo "3. CLI (bundle installed under home):"
+echo "   node $BUNDLE_DEST/bin/mandao.js init --authorization \"Bearer \$MANDAO_MCP_API_KEY\""
+echo "   node $BUNDLE_DEST/bin/mandao.js query qjda --idNo ... --idName ..."
+echo ""
+echo "4. Optional global CLI: cd $BUNDLE_DEST && npm install -g ."
+echo ""
+echo "=========================================="
+echo "  Documentation"
+echo "=========================================="
+echo ""
+echo "• README.md                    - 项目说明与技能总览"
+echo "• docs/MCP_CONFIGURATION.md - 配置、验证、排障（已复制到 $BUNDLE_DEST/docs/）"
+echo "• SKILL.md (each skill)       - 使用指南"
+echo "• reference.md (each skill)   - 字段参考"
+echo ""
+echo -e "${GREEN}🎉 Installation complete!${NC}"
 echo ""
 
 if [ "$INSTALL_MODE" == "curl" ] && [ -n "$TEMP_DIR" ]; then
