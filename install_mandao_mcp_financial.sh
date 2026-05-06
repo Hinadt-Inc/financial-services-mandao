@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # Financial Services Mandao MCP Plugin Installation Script
 # 金融机构漫道讯信MCP插件安装脚本
 #
