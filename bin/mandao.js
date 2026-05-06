@@ -276,17 +276,23 @@ function printHeader (title, options) {
 }
 
 function printBizMeta (d) {
-  console.log(`  响应码: ${d.code} (${d.desc})   收费: ${d.fee}`);
+  const { code, desc, fee } = d
+  const feeStr = {
+    Y: '收费(Y)',
+    N: '免费(N)',
+  }[fee] || fee;
+  console.log(`  响应码: ${code} (${desc})   是否收费: ${feeStr}`);
 }
 
 /* ── 全景指数 QJDA ── */
 function printQjda (d) {
   printBizMeta(d);
-  if (d.code !== '0' || !d.result_detail) {
+  const { code, results } = d
+  if (code !== '0' || !results?.result_detail) {
     console.log('\n  未命中，无结果数据。');
     return;
   }
-  const r = d.result_detail;
+  const r = results.result_detail;
 
   console.log('\n  ┌ 逾期概况（近6个月）');
   console.log(`  │  逾期机构数: ${r.member_count ?? '-'}   逾期订单数: ${r.order_count ?? '-'}   逾期总金额: ${r.debt_amount ?? '-'} 元`);
@@ -296,7 +302,7 @@ function printQjda (d) {
     console.log('  │  （无逾期记录）');
   } else {
     r.debt_detail.forEach((x, i) =>
-      console.log(`  │  [${i + 1}] ${x.endDay}  账期:${x.billType}  金额:${x.endMoney}  结清:${x.endFlag}`),
+      console.log(`\n  │  [${i + 1}] 逾期时间:${x.endDay}  逾期账期数:${x.billType}  逾期金额:${x.endMoney}  是否结清:${x.endFlag === 'Y' ? '已结清' : '未结清'}`),
     );
   }
 
@@ -308,7 +314,7 @@ function printQjda (d) {
     console.log('     （无历史共债记录）');
   } else {
     r.totaldebt_detail.forEach((x) =>
-      console.log(`     ${x.totaldebt_date}  机构:${x.totaldebt_org_count}  订单:${x.totaldebt_order_count}  借新还旧:${x.new_or_old}`),
+      console.log(`\n     时间范围:${x.totaldebt_date}  共债机构数:${x.totaldebt_org_count}  共债订单数:${x.totaldebt_order_count}  疑似借新还旧:${x.new_or_old}`),
     );
   }
 }
@@ -316,27 +322,29 @@ function printQjda (d) {
 /* ── 综合指数V2 ZX-RadarV2 ── */
 function printZxRadarV2 (d) {
   printBizMeta(d);
-  if (d.code !== '0' || !d.result_detail) {
+  const { code, results } = d
+  if (code !== '0' || !results?.result_detail) {
     console.log('\n  未命中，无结果数据。');
     return;
   }
-  const r = d.result_detail;
+  const r = results.result_detail;
   const ar = r.apply_report_detail || {};
   const br = r.behavior_report_detail || {};
   const cr = r.current_report_detail || {};
 
-  console.log('\n  ┌ 申请雷达');
+  console.log('\n  ┌ 申请雷达报告详情');
   console.log(`  │  申请准入分:${ar.A22160001 ?? '-'}  置信度:${ar.A22160002 ?? '-'}  命中机构:${ar.A22160003 ?? '-'}`);
+  console.log(`  │  申请命中消金类机构数:${ar.A22160004 ?? '-'}  申请命中网络贷款类机构数:${ar.A22160005 ?? '-'}  机构总查询次数:${ar.A22160006 ?? '-'}  最近一次查询时间:${ar.A22160007 ?? '-'}`);
   console.log(`  │  查询次数 近1月:${ar.A22160008 ?? '-'}  近3月:${ar.A22160009 ?? '-'}  近6月:${ar.A22160010 ?? '-'}`);
 
-  console.log('\n  ├ 行为雷达');
+  console.log('\n  ├ 行为雷达报告详情');
   console.log(`  │  贷款行为分:${br.B22170001 ?? '-'}  置信度:${br.B22170051 ?? '-'}  正常还款率:${br.B22170034 ?? '-'}%`);
   console.log(`  │  贷款笔数 近1月:${br.B22170002 ?? '-'}  近3月:${br.B22170003 ?? '-'}  近6月:${br.B22170004 ?? '-'}  近12月:${br.B22170005 ?? '-'}`);
   console.log(`  │  逾期笔数(M0+) 近6月:${br.B22170025 ?? '-'}  近12月:${br.B22170026 ?? '-'}`);
   console.log(`  │  逾期笔数(M1+) 近6月:${br.B22170028 ?? '-'}  近12月:${br.B22170029 ?? '-'}`);
   console.log(`  │  失败扣款 近1月:${br.B22170035 ?? '-'}  近3月:${br.B22170036 ?? '-'}  近6月:${br.B22170037 ?? '-'}`);
 
-  console.log('\n  └ 信用现状');
+  console.log('\n  └ 信用现状报告详情');
   console.log(`     网贷建议额度:${cr.C22180001 ?? '-'}元  置信度:${cr.C22180002 ?? '-'}  在贷机构:${cr.C22180003 ?? '-'}`);
   console.log(`     消金建议额度:${cr.C22180011 ?? '-'}元  置信度:${cr.C22180012 ?? '-'}  在贷机构:${cr.C22180007 ?? '-'}`);
 }
@@ -351,24 +359,17 @@ const QJTZ_CODE_MAP = {
 
 function printQjtz (d) {
   printBizMeta(d);
-  if (d.code !== '0' || !d.result_detail) {
+  const { code, results } = d
+  if (code !== '0' || !results?.result_detail) {
     console.log('\n  未命中，无结果数据。');
     return;
   }
-  const r = d.result_detail;
+  const r = results.result_detail;
   console.log(`\n  信用状态: ${QJTZ_CODE_MAP[r.result_code] ?? r.result_code}`);
-
-  if (r.result_code === '1' || r.result_code === '3') {
-    console.log('\n  ┌ 逾期维度');
-    console.log(`  │  最大逾期金额:${r.max_overdue_amt ?? '-'}  最长逾期天数:${r.max_overdue_days ?? '-'}  最近逾期:${r.latest_overdue_time ?? '-'}`);
-    console.log(`  └  当前逾期机构:${r.currently_overdue ?? '-'}  异常还款机构:${r.acc_exc ?? '-'}`);
-  }
-
-  if (r.result_code === '2' || r.result_code === '3') {
-    console.log('\n  └ 履约维度（正向）');
-    console.log(`     最大履约金额:${r.max_performance_amt ?? '-'}  履约笔数:${r.count_performance ?? '-'}  最近履约:${r.latest_performance_time ?? '-'}`);
-    console.log(`     当前履约机构:${r.currently_performance ?? '-'}  睡眠机构:${r.acc_sleep ?? '-'}`);
-  }
+  console.log('\n  ┌ 结果详情');
+  console.log(`  │  最大逾期金额:${r.max_overdue_amt ?? '-'}  最长逾期天数:${r.max_overdue_days ?? '-'}  最近逾期时间:${r.latest_overdue_time ?? '-'}`);
+  console.log(`  └  最大履约金额:${r.max_performance_amt ?? '-'}  最近履约时间:${r.latest_performance_time ?? '-'}  履约笔数:${r.count_performance ?? '-'}`);
+  console.log(`  └  当前逾期机构数:${r.currently_overdue ?? '-'}  当前履约机构数:${r.currently_performance ?? '-'}  异常还款机构数:${r.acc_exc ?? '-'}  睡眠机构数:${r.acc_sleep ?? '-'}`);
 }
 
 /* ── 履约指数 FMLH ── */
@@ -379,18 +380,17 @@ const FMLH_CODE_MAP = {
 
 function printFmlh (d) {
   printBizMeta(d);
-  if (d.code !== '0' || !d.result_detail) {
+  const { code, results } = d
+  if (code !== '0' || !results?.result_detail) {
     console.log('\n  未命中，无结果数据。');
     return;
   }
-  const r = d.result_detail;
+  const r = results.result_detail;
   console.log(`\n  履约状态: ${FMLH_CODE_MAP[r.result_code] ?? r.result_code}`);
 
-  if (r.result_code === '1') {
-    console.log('\n  ┌ 逾期详情');
-    console.log(`  │  最大逾期金额:${r.max_overdue_amt ?? '-'}  最长逾期天数:${r.max_overdue_days ?? '-'}  最近逾期:${r.latest_overdue_time ?? '-'}`);
-    console.log(`  └  当前逾期机构:${r.currently_overdue ?? '-'}  当前履约机构:${r.currently_performance ?? '-'}  异常还款:${r.acc_exc ?? '-'}  睡眠机构:${r.acc_sleep ?? '-'}`);
-  }
+  console.log('\n  ┌ 结果详情');
+  console.log(`  │  最大逾期金额:${r.max_overdue_amt ?? '-'}  最长逾期天数:${r.max_overdue_days ?? '-'}  最近逾期:${r.latest_overdue_time ?? '-'}`);
+  console.log(`  └  当前逾期机构:${r.currently_overdue ?? '-'}  当前履约机构:${r.currently_performance ?? '-'}  异常还款:${r.acc_exc ?? '-'}  睡眠机构:${r.acc_sleep ?? '-'}`);
 }
 
 // ─────────────────────────────────────────────
