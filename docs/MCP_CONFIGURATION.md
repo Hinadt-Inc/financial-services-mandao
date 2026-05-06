@@ -17,7 +17,7 @@
 重新运行安装脚本，它会自动创建 `.mcp.json`：
 
 ```bash
-bash <(curl -sL https://raw.githubusercontent.com/rdd0820/financial-services-mandao/main/install_mandao_mcp_financial.sh)
+bash <(curl -sL https://raw.githubusercontent.com/hinadt/financial-services-mandao/main/install_mandao_mcp_financial.sh)
 ```
 
 ### 方法 2：手动配置

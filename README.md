@@ -66,7 +66,7 @@
 ### 第二步：一键安装
 
 ```bash
-git clone https://github.com/rdd0820/financial-services-mandao.git
+git clone https://github.com/hinadt/financial-services-mandao.git
 cd financial-services-mandao
 export MANDAO_MCP_API_KEY="your_api_key_here"
 bash install_mandao_mcp_financial.sh

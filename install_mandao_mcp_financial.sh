@@ -4,7 +4,7 @@
 #
 #
 # 一键安装命令:
-#   bash <(curl -sL https://raw.githubusercontent.com/rdd0820/financial-services-mandao/main/install_mandao_mcp_financial.sh)
+#   bash <(curl -sL https://raw.githubusercontent.com/hinadt/financial-services-mandao/main/install_mandao_mcp_financial.sh)
 #
 # 本地安装命令:
 #   bash install_mandao_mcp_financial.sh
@@ -48,7 +48,7 @@ if [[ "$SCRIPT_SOURCE" == /dev/fd/* ]] || [[ "$SCRIPT_SOURCE" == /proc/*/fd/* ]]
   echo -e "${BLUE}Installation mode: curl (downloading from GitHub)${NC}"
 
   # 与 install_qcc_mcp_financial.sh 一致：curl 管道执行时默认拉 main 分支 tarball；可用 MANDAO_INSTALL_TAR_URL 覆盖（如私有 fork、固定 tag）
-  MANDAO_INSTALL_TAR_URL="${MANDAO_INSTALL_TAR_URL:-https://github.com/rdd0820/financial-services-mandao/archive/refs/heads/main.tar.gz}"
+  MANDAO_INSTALL_TAR_URL="${MANDAO_INSTALL_TAR_URL:-https://github.com/hinadt/financial-services-mandao/archive/refs/heads/main.tar.gz}"
 
   TEMP_DIR=$(mktemp -d)
   echo -e "${BLUE}Downloading from: $MANDAO_INSTALL_TAR_URL${NC}"
