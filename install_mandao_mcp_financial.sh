@@ -3,18 +3,11 @@
 # 金融机构漫道讯信MCP插件安装脚本
 #
 #
-# 一键安装（需先设置 tarball URL）:
-#   export MANDAO_INSTALL_TAR_URL="https://github.com/<org>/<repo>/archive/refs/heads/main.tar.gz"
-#   bash <(curl -sL "$MANDAO_INSTALL_TAR_URL"某方式)   # 建议下载仓库后本地执行
+# 一键安装命令:
+#   bash <(curl -sL https://raw.githubusercontent.com/rdd0820/financial-services-mandao/main/install_mandao_mcp_financial.sh)
 #
-# 推荐：克隆/解压仓库后在本目录执行：
-#   export MANDAO_MCP_API_KEY="your_key"
+# 本地安装命令:
 #   bash install_mandao_mcp_financial.sh
-#
-# 可选环境变量:
-#   MANDAO_MCP_API_KEY      MCP 认证（与 .mcp.json 中 Bearer ${MANDAO_MCP_API_KEY} 对应，需重启后在 Claude 所在环境生效）
-#   MANDAO_MCP_SSE_URL      MCP SSE 地址，默认 http://10.254.75.48:8080/mcp/sse
-#   MANDAO_INSTALL_TAR_URL  curl 模式下的 GitHub archive 完整 URL（未设置则 curl 模式报错退出）
 
 set -e
 
@@ -57,8 +50,8 @@ if [[ "$SCRIPT_SOURCE" == /dev/fd/* ]] || [[ "$SCRIPT_SOURCE" == /proc/*/fd/* ]]
   if [ -z "${MANDAO_INSTALL_TAR_URL:-}" ]; then
     echo -e "${RED}Error: MANDAO_INSTALL_TAR_URL is not set.${NC}"
     echo "Example:"
-    echo '  export MANDAO_INSTALL_TAR_URL="https://github.com/<org>/financial-services-mandao/archive/refs/heads/main.tar.gz"'
-    echo "  bash -s < <(curl -sL https://raw.githubusercontent.com/<org>/<repo>/main/install_mandao_mcp_financial.sh)"
+    echo '  export MANDAO_INSTALL_TAR_URL="https://github.com/rdd0820/financial-services-mandao/archive/refs/heads/main.tar.gz"'
+    echo "  bash -s < <(curl -sL https://raw.githubusercontent.com/rdd0820/financial-services-mandao/main/install_mandao_mcp_financial.sh)"
     echo ""
     echo "Or clone the repo and run this script locally (recommended)."
     exit 1
