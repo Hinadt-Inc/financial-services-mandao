@@ -20,8 +20,6 @@
 bash <(curl -sL https://raw.githubusercontent.com/rdd0820/financial-services-mandao/main/install_mandao_mcp_financial.sh)
 ```
 
-安装完成后：**完全退出并重启** Claude Code。
-
 ### 方法 2：手动配置
 
 如果已经安装了 SKILL，只需要手动创建 .mcp.json 文件：
