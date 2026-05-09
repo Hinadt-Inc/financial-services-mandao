@@ -4,7 +4,7 @@
 
 ## 问题说明
 
-**现象**：安装 `skills/` 后，Claude Code（或其它 MCP 客户端）没有调用迅信 MCP，而是使用网页搜索或空泛描述。
+**现象**：安装 `skills/` 后，Claude Code（或其它 MCP 客户端）没有调用漫道 MCP，而是使用网页搜索或空泛描述。
 
 **原因**：客户端需要通过 `.mcp.json` 注册可用的 MCP 服务器与鉴权；未加载该配置或配置错误时，模型无法发起 `tools/call`。另外，浏览器能上网不代表内网 **SSE URL** 可达。
 
@@ -17,7 +17,7 @@
 重新运行安装脚本，它会自动创建 `.mcp.json`：
 
 ```bash
-bash <(curl -sL https://raw.githubusercontent.com/hinadt/financial-services-mandao/main/install_mandao_mcp_financial.sh)
+bash <(curl -sL https://raw.githubusercontent.com/Hinadt-Inc/financial-services-mandao/main/install_mandao_mcp_financial.sh)
 ```
 
 ### 方法 2：手动配置
@@ -35,7 +35,7 @@ cat > ~/.claude/.mcp.json << 'EOF'
       "headers": {
         "Authorization": "Bearer ${MANDAO_MCP_API_KEY}"
       },
-      "description": "漫道迅信 MCP - 全景指数/综合指数V2/信用探查指数/履约指数"
+      "description": "漫道 MCP - 全景指数/综合指数V2/信用探查指数/履约指数"
     }
   }
 }

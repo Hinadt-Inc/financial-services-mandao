@@ -400,22 +400,22 @@ function printFmlh (d) {
 const PRODUCTS = {
   qjda: {
     tool: 'getXunxinQjdaV130',
-    title: '迅信-全景指数 QJDA 1.3.0',
+    title: '风控-全景指数 QJDA 1.3.0',
     print: printQjda,
   },
   zxradarv2: {
     tool: 'getXunxinZxRadarV2',
-    title: '迅信-综合指数V2 ZX-RadarV2_1 2.1.0',
+    title: '风控-综合指数V2 ZX-RadarV2_1 2.1.0',
     print: printZxRadarV2,
   },
   qjtz: {
     tool: 'getXunxinQjtzV140',
-    title: '迅信-信用探查指数 QJTZ 1.4.0',
+    title: '风控-信用探查指数 QJTZ 1.4.0',
     print: printQjtz,
   },
   fmlh: {
     tool: 'getXunxinFmlhV140',
-    title: '迅信-履约指数 FMLH 1.4.0',
+    title: '风控-履约指数 FMLH 1.4.0',
     print: printFmlh,
   },
 };

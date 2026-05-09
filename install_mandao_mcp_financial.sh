@@ -1,10 +1,10 @@
 #!/bin/bash
 # Financial Services Mandao MCP Plugin Installation Script
-# 金融机构漫道迅信MCP插件安装脚本
+# 金融机构漫道MCP插件安装脚本
 #
 #
 # 一键安装命令:
-#   bash <(curl -sL https://raw.githubusercontent.com/hinadt/financial-services-mandao/main/install_mandao_mcp_financial.sh)
+#   bash <(curl -sL https://raw.githubusercontent.com/Hinadt-Inc/financial-services-mandao/main/install_mandao_mcp_financial.sh)
 #
 # 本地安装命令:
 #   bash install_mandao_mcp_financial.sh
@@ -19,7 +19,7 @@ NC='\033[0m'
 
 echo "=========================================="
 echo "  Financial Services Mandao MCP Installer"
-echo "  金融机构漫道迅信MCP安装程序"
+echo "  金融机构漫道MCP安装程序"
 echo "=========================================="
 echo ""
 
@@ -48,7 +48,7 @@ if [[ "$SCRIPT_SOURCE" == /dev/fd/* ]] || [[ "$SCRIPT_SOURCE" == /proc/*/fd/* ]]
   echo -e "${BLUE}Installation mode: curl (downloading from GitHub)${NC}"
 
   # 与 install_qcc_mcp_financial.sh 一致：curl 管道执行时默认拉 main 分支 tarball；可用 MANDAO_INSTALL_TAR_URL 覆盖（如私有 fork、固定 tag）
-  MANDAO_INSTALL_TAR_URL="${MANDAO_INSTALL_TAR_URL:-https://github.com/hinadt/financial-services-mandao/archive/refs/heads/main.tar.gz}"
+  MANDAO_INSTALL_TAR_URL="${MANDAO_INSTALL_TAR_URL:-https://github.com/Hinadt-Inc/financial-services-mandao/archive/refs/heads/main.tar.gz}"
 
   TEMP_DIR=$(mktemp -d)
   echo -e "${BLUE}Downloading from: $MANDAO_INSTALL_TAR_URL${NC}"
@@ -140,7 +140,7 @@ cat > "$MCP_CONFIG_DEST" << MCPJSONEOF
       "headers": {
         "Authorization": "Bearer \${MANDAO_MCP_API_KEY}"
       },
-      "description": "漫道迅信MCP - 全景指数/综合指数V2/信用探查指数/履约指数"
+      "description": "漫道MCP - 全景指数/综合指数V2/信用探查指数/履约指数"
     }
   }
 }
