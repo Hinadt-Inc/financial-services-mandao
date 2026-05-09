@@ -69,7 +69,7 @@ else
   SOURCE_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
 fi
 
-MANDAO_MCP_SSE_URL="${MANDAO_MCP_SSE_URL:-http://10.254.75.48:8080/mcp/sse}"
+MANDAO_MCP_SSE_URL="${MANDAO_MCP_SSE_URL:-https://agent.hinadt.com/mcp}"
 
 if [ -z "${MANDAO_MCP_API_KEY:-}" ]; then
   echo -e "${YELLOW}⚠️  MANDAO_MCP_API_KEY not found in environment${NC}"

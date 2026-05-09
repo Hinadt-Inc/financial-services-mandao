@@ -31,7 +31,7 @@ cat > ~/.claude/.mcp.json << 'EOF'
 {
   "mcpServers": {
     "mandao-company": {
-      "url": "http://10.254.75.48:8080/mcp/sse",
+      "url": "https://agent.hinadt.com/mcp",
       "headers": {
         "Authorization": "Bearer ${MANDAO_MCP_API_KEY}"
       },
@@ -64,7 +64,7 @@ claude
 | 项目            | 说明                                                                    |
 | --------------- | ----------------------------------------------------------------------- |
 | **Server 名称** | `mandao-company`                                                        |
-| **MCP URL**     | 由机构提供；示例：`http://10.254.75.48:8080/mcp/sse`                    |
+| **MCP URL**     | 由机构提供；示例：`https://agent.hinadt.com/mcp`                        |
 | **协议**        | SSE：`GET` 建连 → `endpoint` 事件获 `POST` 地址 → JSON-RPC `tools/call` |
 | **鉴权**        | `Authorization: Bearer <token>`                                         |
 
@@ -110,7 +110,7 @@ claude
 ### 验证方法 3：CLI（可选）
 
 ```bash
-mandao init --authorization "Bearer $MANDAO_MCP_API_KEY" --url http://10.254.75.48:8080/mcp/sse
+mandao init --authorization "Bearer $MANDAO_MCP_API_KEY" --url https://agent.hinadt.com/mcp
 mandao query fmlh --idNo 110101199001011234 --idName 张三
 ```
 

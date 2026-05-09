@@ -193,7 +193,7 @@ bash install_mandao_mcp_financial.sh
 
 ```bash
 npm install -g mandao-agent-cli
-mandao init --authorization "Bearer YOUR_API_KEY" --url http://10.254.75.48:8080/mcp/sse
+mandao init --authorization "Bearer YOUR_API_KEY" --url https://agent.hinadt.com/mcp
 mandao query qjda|zxradarv2|qjtz|fmlh --idNo … --idName … [--phoneNo …] [--json] [--verbose]
 mandao config show
 ```
