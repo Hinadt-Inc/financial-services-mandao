@@ -1,5 +1,5 @@
 ---
-name: xunxin-qjtz
+name: risk-qjtz
 description: >
   风控信用探查指数 SKILL · QJTZ 1.4.0。
   基于三方支付数据，对贷前申请人同时评估逾期和履约双维度，返回探查结果编码
@@ -10,12 +10,12 @@ description: >
 
   当用户询问信用探查指数、QJTZ、逾期与履约双维度、正常履约状态、延迟履约、探查指数时调用本技能。
 
-  使用方式：/xunxin-qjtz --idNo <身份证号> --idName <姓名> [--phoneNo <手机号>] [--format md]
+  使用方式：/risk-qjtz --idNo <身份证号> --idName <姓名> [--phoneNo <手机号>] [--format md]
 
 license: Apache-2.0
 metadata:
   version: "1.0"
-  plugin-commands: "/xunxin-qjtz"
+  plugin-commands: "/risk-qjtz"
   mcp-integrations: "mandao-company"
   industry: "Financial Services - Consumer Credit / Risk Management"
 ---

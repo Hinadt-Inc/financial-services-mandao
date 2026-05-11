@@ -1,5 +1,5 @@
 ---
-name: xunxin-fmlh
+name: risk-fmlh
 description: >
   风控履约指数 SKILL · FMLH 1.4.0。
   基于三方支付数据，对贷前申请人评估近期是否正常履约，返回探查结果编码（A=有逾期 / U=无数据）、
@@ -8,14 +8,14 @@ description: >
   关键评估指标：击中率、拒绝率、风险提升度。
 
   当用户询问履约指数、FMLH、近期是否履约、当前是否逾期、快速黑名单核验时调用本技能。
-  若需要同时获取正常履约正向信号，请改用信用探查指数（/xunxin-qjtz）。
+  若需要同时获取正常履约正向信号，请改用信用探查指数（/risk-qjtz）。
 
-  使用方式：/xunxin-fmlh --idNo <身份证号> --idName <姓名> [--phoneNo <手机号>] [--format md]
+  使用方式：/risk-fmlh --idNo <身份证号> --idName <姓名> [--phoneNo <手机号>] [--format md]
 
 license: Apache-2.0
 metadata:
   version: "1.0"
-  plugin-commands: "/xunxin-fmlh"
+  plugin-commands: "/risk-fmlh"
   mcp-integrations: "mandao-company"
   industry: "Financial Services - Consumer Credit / Risk Management"
 ---

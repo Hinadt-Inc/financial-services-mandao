@@ -150,17 +150,17 @@ echo -e "${GREEN}  ✓ MCP configuration installed to: $MCP_CONFIG_DEST${NC}"
 
 echo ""
 echo "=========================================="
-echo "  Step 2: Installing Skills (xunxin-*)"
+echo "  Step 2: Installing Skills (risk-*)"
 echo "=========================================="
 
 SKILLS_DIR="$CLAUDE_DIR/skills"
 mkdir -p "$SKILLS_DIR"
 
 MANDAO_SKILLS=(
-  "xunxin-qjda"
-  "xunxin-zxradarv2"
-  "xunxin-qjtz"
-  "xunxin-fmlh"
+  "risk-qjda"
+  "risk-zxradarv2"
+  "risk-qjtz"
+  "risk-fmlh"
 )
 
 for skill in "${MANDAO_SKILLS[@]}"; do
@@ -280,7 +280,7 @@ if [ -n "${MANDAO_MCP_API_KEY:-}" ]; then
   echo "Ensure the same environment launches Claude Code so the key is visible to the MCP client."
 else
   echo -e "${YELLOW}Mandao MCP Status: NOT CONFIGURED${NC}"
-  echo "To enable Mandao / Xunxin MCP:"
+  echo "To enable Mandao / MCP:"
   echo "  export MANDAO_MCP_API_KEY='your_key_here'"
 fi
 
@@ -308,10 +308,10 @@ echo "1. Verify MCP: Claude should list tools from mandao-company (e.g. getRiskF
 echo ""
 echo "2. Slash skills (see each SKILL.md):"
 echo ""
-echo "   /xunxin-qjda --idNo ... --idName ..."
-echo "   /xunxin-zxradarv2 --idNo ... --idName ..."
-echo "   /xunxin-qjtz --idNo ... --idName ..."
-echo "   /xunxin-fmlh --idNo ... --idName ..."
+echo "   /risk-qjda --idNo ... --idName ..."
+echo "   /risk-zxradarv2 --idNo ... --idName ..."
+echo "   /risk-qjtz --idNo ... --idName ..."
+echo "   /risk-fmlh --idNo ... --idName ..."
 echo ""
 echo "3. CLI (bundle installed under home):"
 echo "   node $BUNDLE_DEST/bin/mandao.js init --authorization \"Bearer \$MANDAO_MCP_API_KEY\""

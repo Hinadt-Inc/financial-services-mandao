@@ -15,25 +15,25 @@
 
 ### 核心分析（2 个）
 
-| 技能            | 命令                | 目标用户                      | 核心场景                                   | 耗时      |
-| --------------- | ------------------- | ----------------------------- | ------------------------------------------ | --------- |
-| **全景指数**    | `/xunxin-qjda`      | 信贷审批、授信初筛            | 近 6 个月逾期明细 + 共债（含借新还旧信号） | ~10–60 秒 |
-| **综合指数 V2** | `/xunxin-zxradarv2` | 策略/建模、风险定价、贷中监测 | 申请雷达 + 行为雷达 + 信用现状，50+ 指标   | ~10–60 秒 |
+| 技能            | 命令              | 目标用户                      | 核心场景                                   | 耗时      |
+| --------------- | ----------------- | ----------------------------- | ------------------------------------------ | --------- |
+| **全景指数**    | `/risk-qjda`      | 信贷审批、授信初筛            | 近 6 个月逾期明细 + 共债（含借新还旧信号） | ~10–60 秒 |
+| **综合指数 V2** | `/risk-zxradarv2` | 策略/建模、风险定价、贷中监测 | 申请雷达 + 行为雷达 + 信用现状，50+ 指标   | ~10–60 秒 |
 
 ### 探查与快筛（2 个）
 
-| 技能             | 命令           | 目标用户             | 核心场景                                  | 耗时      |
-| ---------------- | -------------- | -------------------- | ----------------------------------------- | --------- |
-| **信用探查指数** | `/xunxin-qjtz` | 贷前审批             | 逾期与履约双维度，四态（含正常/延迟履约） | ~10–60 秒 |
-| **履约指数**     | `/xunxin-fmlh` | 贷前快筛、黑名单初筛 | 仅判断是否逾期 vs 无数据，成本最低        | ~10–60 秒 |
+| 技能             | 命令         | 目标用户             | 核心场景                                  | 耗时      |
+| ---------------- | ------------ | -------------------- | ----------------------------------------- | --------- |
+| **信用探查指数** | `/risk-qjtz` | 贷前审批             | 逾期与履约双维度，四态（含正常/延迟履约） | ~10–60 秒 |
+| **履约指数**     | `/risk-fmlh` | 贷前快筛、黑名单初筛 | 仅判断是否逾期 vs 无数据，成本最低        | ~10–60 秒 |
 
 **选型提示**
 
 ```
-只需快速判断「有无逾期」     → /xunxin-fmlh
-需要区分正常 / 延迟履约      → /xunxin-qjtz
-需要逾期 + 共债双维度        → /xunxin-qjda
-需要入模 / 全链路多维分析    → /xunxin-zxradarv2
+只需快速判断「有无逾期」     → /risk-fmlh
+需要区分正常 / 延迟履约      → /risk-qjtz
+需要逾期 + 共债双维度        → /risk-qjda
+需要入模 / 全链路多维分析    → /risk-zxradarv2
 ```
 
 ---
@@ -48,12 +48,12 @@
 
 **技能与 MCP 工具对应**
 
-| 技能                            | `mandao-company` 工具名 |
-| ------------------------------- | ----------------------- |
-| 全景指数 `/xunxin-qjda`         | `getRiskXQjdaV130`      |
-| 综合指数 V2 `/xunxin-zxradarv2` | `getRiskZxRadarV2`      |
-| 信用探查 `/xunxin-qjtz`         | `getRiskQjtzV140`       |
-| 履约指数 `/xunxin-fmlh`         | `getRiskFmlhV140`       |
+| 技能                          | `mandao-company` 工具名 |
+| ----------------------------- | ----------------------- |
+| 全景指数 `/risk-qjda`         | `getRiskXQjdaV130`      |
+| 综合指数 V2 `/risk-zxradarv2` | `getRiskZxRadarV2`      |
+| 信用探查 `/risk-qjtz`         | `getRiskQjtzV140`       |
+| 履约指数 `/risk-fmlh`         | `getRiskFmlhV140`       |
 
 ---
 
@@ -80,16 +80,16 @@ bash install_mandao_mcp_financial.sh
 
 ```bash
 # 全景指数（逾期 + 共债）
-/xunxin-qjda --idNo 110101199001011234 --idName 张三 --phoneNo 13800138000
+/risk-qjda --idNo 110101199001011234 --idName 张三 --phoneNo 13800138000
 
 # 综合指数 V2（申请 / 行为 / 信用现状）
-/xunxin-zxradarv2 --idNo 110101199001011234 --idName 张三
+/risk-zxradarv2 --idNo 110101199001011234 --idName 张三
 
 # 信用探查（四态）
-/xunxin-qjtz --idNo 110101199001011234 --idName 张三
+/risk-qjtz --idNo 110101199001011234 --idName 张三
 
 # 履约快筛（两态）
-/xunxin-fmlh --idNo 110101199001011234 --idName 张三
+/risk-fmlh --idNo 110101199001011234 --idName 张三
 ```
 
 > **验证 MCP 是否生效**：执行后应出现对 **`mandao-company`** 下工具的调用（如 `getRiskXQjdaV130`），而不是仅「网页搜索」。
@@ -98,12 +98,12 @@ bash install_mandao_mcp_financial.sh
 
 ## 快速命令参考
 
-| 命令                | 功能                           | 典型耗时  | 输出格式                          |
-| ------------------- | ------------------------------ | --------- | --------------------------------- |
-| `/xunxin-qjda`      | 全景指数 QJDA 1.3.0            | ~10–60 秒 | Markdown（见 SKILL，可扩展 docx） |
-| `/xunxin-zxradarv2` | 综合指数 V2 ZX-RadarV2_1 2.1.0 | ~10–60 秒 | Markdown（三子报告结构）          |
-| `/xunxin-qjtz`      | 信用探查 QJTZ 1.4.0            | ~10–60 秒 | Markdown                          |
-| `/xunxin-fmlh`      | 履约 FMLH 1.4.0                | ~10–60 秒 | Markdown                          |
+| 命令              | 功能                           | 典型耗时  | 输出格式                          |
+| ----------------- | ------------------------------ | --------- | --------------------------------- |
+| `/risk-qjda`      | 全景指数 QJDA 1.3.0            | ~10–60 秒 | Markdown（见 SKILL，可扩展 docx） |
+| `/risk-zxradarv2` | 综合指数 V2 ZX-RadarV2_1 2.1.0 | ~10–60 秒 | Markdown（三子报告结构）          |
+| `/risk-qjtz`      | 信用探查 QJTZ 1.4.0            | ~10–60 秒 | Markdown                          |
+| `/risk-fmlh`      | 履约 FMLH 1.4.0                | ~10–60 秒 | Markdown                          |
 
 详见 [MCP 配置指南](./docs/MCP_CONFIGURATION.md)
 
@@ -111,7 +111,7 @@ bash install_mandao_mcp_financial.sh
 
 ## 技能详解
 
-### 1. 全景指数 · `xunxin-qjda`
+### 1. 全景指数 · `risk-qjda`
 
 **适用对象**：信贷审批、贷前运营、风控策略（击中率 / 拒绝率 / 风险提升度）
 
@@ -120,12 +120,12 @@ bash install_mandao_mcp_financial.sh
 **MCP**：`mcp__mandao-company__getRiskXQjdaV130`
 
 ```bash
-/xunxin-qjda --idNo <身份证> --idName <姓名> [--phoneNo <手机号>] [--format md]
+/risk-qjda --idNo <身份证> --idName <姓名> [--phoneNo <手机号>] [--format md]
 ```
 
 ---
 
-### 2. 综合指数 V2 · `xunxin-zxradarv2`
+### 2. 综合指数 V2 · `risk-zxradarv2`
 
 **适用对象**：策略与模型、授信定价、贷中监测（KS / AUC）
 
@@ -134,12 +134,12 @@ bash install_mandao_mcp_financial.sh
 **MCP**：`mcp__mandao-company__getRiskZxRadarV2`
 
 ```bash
-/xunxin-zxradarv2 --idNo <身份证> --idName <姓名> [--phoneNo <手机号>] [--format md]
+/risk-zxradarv2 --idNo <身份证> --idName <姓名> [--phoneNo <手机号>] [--format md]
 ```
 
 ---
 
-### 3. 信用探查指数 · `xunxin-qjtz`
+### 3. 信用探查指数 · `risk-qjtz`
 
 **适用对象**：贷前审批、需正负双向（逾期 + 履约）画像
 
@@ -148,12 +148,12 @@ bash install_mandao_mcp_financial.sh
 **MCP**：`mcp__mandao-company__getRiskQjtzV140`
 
 ```bash
-/xunxin-qjtz --idNo <身份证> --idName <姓名> [--phoneNo <手机号>] [--format md]
+/risk-qjtz --idNo <身份证> --idName <姓名> [--phoneNo <手机号>] [--format md]
 ```
 
 ---
 
-### 4. 履约指数 · `xunxin-fmlh`
+### 4. 履约指数 · `risk-fmlh`
 
 **适用对象**：高并发初筛、仅需是否逾期命中
 
@@ -162,7 +162,7 @@ bash install_mandao_mcp_financial.sh
 **MCP**：`mcp__mandao-company__getRiskFmlhV140`
 
 ```bash
-/xunxin-fmlh --idNo <身份证> --idName <姓名> [--phoneNo <手机号>] [--format md]
+/risk-fmlh --idNo <身份证> --idName <姓名> [--phoneNo <手机号>] [--format md]
 ```
 
 ---
@@ -173,15 +173,15 @@ bash install_mandao_mcp_financial.sh
 
 ```
 收到身份证 + 姓名
-→ /xunxin-fmlh 快速命中
-→ 未排除则 /xunxin-qjtz 或 /xunxin-qjda（共债 / 双维度）
-→ 需定价或建模特征时 /xunxin-zxradarv2
+→ /risk-fmlh 快速命中
+→ 未排除则 /risk-qjtz 或 /risk-qjda（共债 / 双维度）
+→ 需定价或建模特征时 /risk-zxradarv2
 ```
 
 ### 策略与报表
 
 ```
-/xunxin-zxradarv2 拉取多轨行为与申请字段
+/risk-zxradarv2 拉取多轨行为与申请字段
 → 与机构自有标签计算 KS/AUC（阈值须用本机构样本标定）
 ```
 
@@ -227,7 +227,7 @@ financial-services-mandao/
 ├── bin/mandao.js
 ├── scripts/                      # 可选：历史单品脚本
 └── skills/
-    └── xunxin-*/                 # SKILL.md + reference.md
+    └── risk-*/                 # SKILL.md + reference.md
 ```
 
 ---

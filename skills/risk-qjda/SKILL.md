@@ -1,5 +1,5 @@
 ---
-name: xunxin-qjda
+name: risk-qjda
 description: >
   风控全景指数 SKILL · QJDA 1.3.0。
   基于三方支付数据，对贷前申请人同时评估近6个月逾期明细（机构数/订单数/金额/是否结清）
@@ -10,12 +10,12 @@ description: >
 
   当用户询问全景指数、QJDA、逾期详情、共债状态、借新还旧、贷前风险核查时调用本技能。
 
-  使用方式：/xunxin-qjda --idNo <身份证号> --idName <姓名> [--phoneNo <手机号>] [--format md]
+  使用方式：/risk-qjda --idNo <身份证号> --idName <姓名> [--phoneNo <手机号>] [--format md]
 
 license: Apache-2.0
 metadata:
   version: "1.0"
-  plugin-commands: "/xunxin-qjda"
+  plugin-commands: "/risk-qjda"
   mcp-integrations: "mandao-company"
   industry: "Financial Services - Consumer Credit / Risk Management"
 ---

@@ -1,5 +1,5 @@
 ---
-name: xunxin-zxradarv2
+name: risk-zxradarv2
 description: >
   风控综合指数V2 SKILL · ZX-RadarV2_1 2.1.0。
   基于三方支付数据，对信贷申请人进行全流程风险评估，返回申请雷达（申请行为分析）、
@@ -9,12 +9,12 @@ description: >
 
   当用户询问综合指数、综合风险评分、ZX-RadarV2、贷中监测、入模评分、申请行为分析、风险定价时调用本技能。
 
-  使用方式：/xunxin-zxradarv2 --idNo <身份证号> --idName <姓名> [--phoneNo <手机号>] [--format md]
+  使用方式：/risk-zxradarv2 --idNo <身份证号> --idName <姓名> [--phoneNo <手机号>] [--format md]
 
 license: Apache-2.0
 metadata:
   version: "1.0"
-  plugin-commands: "/xunxin-zxradarv2"
+  plugin-commands: "/risk-zxradarv2"
   mcp-integrations: "mandao-company"
   industry: "Financial Services - Consumer Credit / Risk Modeling"
 ---

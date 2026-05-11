@@ -70,12 +70,12 @@ claude
 
 **工具与技能目录对应**
 
-| `tools/call` → `name` | 技能目录           | 产品                |
-| --------------------- | ------------------ | ------------------- |
-| `getRiskXQjdaV130`    | `xunxin-qjda`      | 全景指数 QJDA 1.3.0 |
-| `getRiskZxRadarV2`    | `xunxin-zxradarv2` | 综合指数 V2，2.1.0  |
-| `getRiskQjtzV140`     | `xunxin-qjtz`      | 信用探查 QJTZ 1.4.0 |
-| `getRiskFmlhV140`     | `xunxin-fmlh`      | 履约 FMLH 1.4.0     |
+| `tools/call` → `name` | 技能目录         | 产品                |
+| --------------------- | ---------------- | ------------------- |
+| `getRiskXQjdaV130`    | `risk-qjda`      | 全景指数 QJDA 1.3.0 |
+| `getRiskZxRadarV2`    | `risk-zxradarv2` | 综合指数 V2，2.1.0  |
+| `getRiskQjtzV140`     | `risk-qjtz`      | 信用探查 QJTZ 1.4.0 |
+| `getRiskFmlhV140`     | `risk-fmlh`      | 履约 FMLH 1.4.0     |
 
 ---
 
@@ -84,7 +84,7 @@ claude
 | 目标                                   | 内容                                  |
 | -------------------------------------- | ------------------------------------- |
 | `~/.claude/.mcp.json`                  | `mandao-company`（覆盖写入前会备份）  |
-| `~/.claude/skills/xunxin-`\*           | `SKILL.md` + `reference.md`           |
+| `~/.claude/skills/risk-`\*             | `SKILL.md` + `reference.md`           |
 | `~/.claude/financial-services-mandao/` | `bin/`、`scripts/`、`package.json` 等 |
 
 ---
@@ -100,7 +100,7 @@ claude
 ### 验证方法 2：执行快捷技能
 
 ```
-/xunxin-fmlh --idNo 110101199001011234 --idName 张三
+/risk-fmlh --idNo 110101199001011234 --idName 张三
 ```
 
 **正确（走 MCP）**：助手说明将调用 `mandao-company` / `getRiskFmlhV140`（或等价工具调用），并返回结构化业务字段。
