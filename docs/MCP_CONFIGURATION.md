@@ -72,10 +72,10 @@ claude
 
 | `tools/call` → `name` | 技能目录           | 产品                |
 | --------------------- | ------------------ | ------------------- |
-| `getXunxinQjdaV130`   | `xunxin-qjda`      | 全景指数 QJDA 1.3.0 |
-| `getXunxinZxRadarV2`  | `xunxin-zxradarv2` | 综合指数 V2，2.1.0  |
-| `getXunxinQjtzV140`   | `xunxin-qjtz`      | 信用探查 QJTZ 1.4.0 |
-| `getXunxinFmlhV140`   | `xunxin-fmlh`      | 履约 FMLH 1.4.0     |
+| `getRiskXQjdaV130`    | `xunxin-qjda`      | 全景指数 QJDA 1.3.0 |
+| `getRiskZxRadarV2`    | `xunxin-zxradarv2` | 综合指数 V2，2.1.0  |
+| `getRiskQjtzV140`     | `xunxin-qjtz`      | 信用探查 QJTZ 1.4.0 |
+| `getRiskFmlhV140`     | `xunxin-fmlh`      | 履约 FMLH 1.4.0     |
 
 ---
 
@@ -103,7 +103,7 @@ claude
 /xunxin-fmlh --idNo 110101199001011234 --idName 张三
 ```
 
-**正确（走 MCP）**：助手说明将调用 `mandao-company` / `getXunxinFmlhV140`（或等价工具调用），并返回结构化业务字段。
+**正确（走 MCP）**：助手说明将调用 `mandao-company` / `getRiskFmlhV140`（或等价工具调用），并返回结构化业务字段。
 
 **错误（未走 MCP）**：仅「让我搜索一下…」、网页搜索、或无从 MCP 拉取的数据。
 
@@ -136,7 +136,7 @@ mandao query fmlh --idNo 110101199001011234 --idName 张三
 
 > **arguments** 统一：`idNo`、`idName` 必填；`phoneNo` 可选。身份证末位 **X 大写**。报文加密由服务端处理。
 
-### 1) `getXunxinZxRadarV2`
+### 1) `getRiskZxRadarV2`
 
 **综合指数 V2**（ZX-RadarV2_1 / 2.1.0）。申请 / 行为 / 信用现状；贷前、定价、贷中监测；建模常看 **KS、AUC**。
 
@@ -146,7 +146,7 @@ mandao query fmlh --idNo 110101199001011234 --idName 张三
 | `idName`  | string | 姓名           |
 | `phoneNo` | string | 手机号（可选） |
 
-### 2) `getXunxinQjdaV130`
+### 2) `getRiskXQjdaV130`
 
 **全景指数**（QJDA / 1.3.0）。逾期 + 共债；贷前 / 授信；策略常看击中率、拒绝率、风险提升度等。
 
@@ -156,7 +156,7 @@ mandao query fmlh --idNo 110101199001011234 --idName 张三
 | `idName`  | string | 姓名           |
 | `phoneNo` | string | 手机号（可选） |
 
-### 3) `getXunxinFmlhV140`
+### 3) `getRiskFmlhV140`
 
 **履约指数**（FMLH / 1.4.0）。近期是否履约；贷前快筛。
 
@@ -166,7 +166,7 @@ mandao query fmlh --idNo 110101199001011234 --idName 张三
 | `idName`  | string | 姓名           |
 | `phoneNo` | string | 手机号（可选） |
 
-### 4) `getXunxinQjtzV140`
+### 4) `getRiskQjtzV140`
 
 **信用探查指数**（QJTZ / 1.4.0）。逾期与履约双维度；贷前。
 

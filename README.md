@@ -50,10 +50,10 @@
 
 | 技能                            | `mandao-company` 工具名 |
 | ------------------------------- | ----------------------- |
-| 全景指数 `/xunxin-qjda`         | `getXunxinQjdaV130`     |
-| 综合指数 V2 `/xunxin-zxradarv2` | `getXunxinZxRadarV2`    |
-| 信用探查 `/xunxin-qjtz`         | `getXunxinQjtzV140`     |
-| 履约指数 `/xunxin-fmlh`         | `getXunxinFmlhV140`     |
+| 全景指数 `/xunxin-qjda`         | `getRiskXQjdaV130`      |
+| 综合指数 V2 `/xunxin-zxradarv2` | `getRiskZxRadarV2`      |
+| 信用探查 `/xunxin-qjtz`         | `getRiskQjtzV140`       |
+| 履约指数 `/xunxin-fmlh`         | `getRiskFmlhV140`       |
 
 ---
 
@@ -92,7 +92,7 @@ bash install_mandao_mcp_financial.sh
 /xunxin-fmlh --idNo 110101199001011234 --idName 张三
 ```
 
-> **验证 MCP 是否生效**：执行后应出现对 **`mandao-company`** 下工具的调用（如 `getXunxinQjdaV130`），而不是仅「网页搜索」。
+> **验证 MCP 是否生效**：执行后应出现对 **`mandao-company`** 下工具的调用（如 `getRiskXQjdaV130`），而不是仅「网页搜索」。
 
 ---
 
@@ -117,7 +117,7 @@ bash install_mandao_mcp_financial.sh
 
 **核心价值**：近 6 个月逾期结构 + 共债（含 `new_or_old` 借新还旧疑似）。
 
-**MCP**：`mcp__mandao-company__getXunxinQjdaV130`
+**MCP**：`mcp__mandao-company__getRiskXQjdaV130`
 
 ```bash
 /xunxin-qjda --idNo <身份证> --idName <姓名> [--phoneNo <手机号>] [--format md]
@@ -131,7 +131,7 @@ bash install_mandao_mcp_financial.sh
 
 **核心价值**：申请雷达 + 行为雷达 + 信用现状，字段最全。
 
-**MCP**：`mcp__mandao-company__getXunxinZxRadarV2`
+**MCP**：`mcp__mandao-company__getRiskZxRadarV2`
 
 ```bash
 /xunxin-zxradarv2 --idNo <身份证> --idName <姓名> [--phoneNo <手机号>] [--format md]
@@ -145,7 +145,7 @@ bash install_mandao_mcp_financial.sh
 
 **核心价值**：`result_code` 四态；含履约向字段（FMLH 不覆盖）。
 
-**MCP**：`mcp__mandao-company__getXunxinQjtzV140`
+**MCP**：`mcp__mandao-company__getRiskQjtzV140`
 
 ```bash
 /xunxin-qjtz --idNo <身份证> --idName <姓名> [--phoneNo <手机号>] [--format md]
@@ -159,7 +159,7 @@ bash install_mandao_mcp_financial.sh
 
 **核心价值**：两态（有逾期 / 无数据）；与 QJTZ 差异见对应 `SKILL.md`。
 
-**MCP**：`mcp__mandao-company__getXunxinFmlhV140`
+**MCP**：`mcp__mandao-company__getRiskFmlhV140`
 
 ```bash
 /xunxin-fmlh --idNo <身份证> --idName <姓名> [--phoneNo <手机号>] [--format md]

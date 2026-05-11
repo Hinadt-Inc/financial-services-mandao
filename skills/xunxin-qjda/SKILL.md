@@ -33,7 +33,7 @@ metadata:
 
 ## MCP 依赖
 
-- 必选：`mandao-company`（`getXunxinQjdaV130`）
+- 必选：`mandao-company`（`getRiskXQjdaV130`）
 
 ## 通用执行原则
 
@@ -52,7 +52,7 @@ metadata:
 ### Step 1：调用 MCP 获取数据
 
 ```
-mcp__mandao-company__getXunxinQjdaV130
+mcp__mandao-company__getRiskXQjdaV130
 参数：{ "idNo": "<身份证号>", "idName": "<姓名>", "phoneNo": "<手机号>" }
 ```
 
