@@ -1,6 +1,6 @@
 {
   "name": "mandao-agent-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "漫道金融 MCP 命令行工具，支持全景指数/综合指数V2/信用探查指数/履约指数查询",
   "main": "bin/mandao.js",
   "bin": {
