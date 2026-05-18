@@ -18,6 +18,7 @@
  * 其他：
  *   mandao config show     显示当前配置
  *   mandao --help
+ *   mandao --version / -v  打印版本号
  *
  * 要求：Node.js >= 20（使用内置 fetch）
  */
@@ -588,6 +589,7 @@ function printHelp() {
       mandao-agent-cli — 漫道金融风控 MCP 命令行工具
 
       用法：
+        mandao [--version|-v]
         mandao init --authorization "Bearer <API_KEY>" [--url <MCP_URL>]
         mandao query <产品> --idNo <身份证> --idName <姓名> [--phoneNo <手机号>] [--json] [--verbose]
         mandao config show
@@ -611,6 +613,12 @@ async function main() {
   const argv = process.argv.slice(2);
   if (!argv.length) {
     printHelp();
+    return;
+  }
+
+  const first = argv[0];
+  if (first === "--version" || first === "-v") {
+    console.log(PKG.version);
     return;
   }
 
